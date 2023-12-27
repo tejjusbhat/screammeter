@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Screaming Meter</title>
+  <style>
+    body {
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+
+      background: url("bg.png") no-repeat;
+      background-size: cover;
+      
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    h1 {
+      font-family: Google Sans;
+      font-weight: 700;
+      font-size: 4rem;
+      color: black;
+      margin-bottom: 5rem;
+    }
+
+    #meterContainer {
+      height: 400px;
+      width: 150px;
+      background-color: lightgray;
+      position: relative;
+      margin: 20px auto;
+    }
+
+    #meterBar {
+      width: 150px;
+      background-color: red;
+      position: absolute;
+      bottom: 0;
+      transition: height 0.1s;
+    }
+    
+    .lowSens {
+      max-height: 250px;
+    }
+
+    .highSens {
+      max-height: 400px;
+    }
+
+  </style>
+</head>
+<body>
+    <h1>Scream-🤯-Meter</h1>
+    <div id="meterContainer">
+      <div id="meterBar" class="lowSens"></div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let audioContext = null;
+      let analyser = null;
+      const sensitivity = 10; // Adjust this sensitivity factor
+
+      const initAudio = async () => {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          analyser = audioContext.createAnalyser();
+          const microphone = audioContext.createMediaStreamSource(stream);
+          microphone.connect(analyser);
+          analyser.fftSize = 256;
+          analyser.smoothingTimeConstant = 0.6;
+
+          const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+          const updateMeter = () => {
+            analyser.getByteFrequencyData(dataArray);
+            const average = dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length;
+            const scaledAverage = average * sensitivity;
+            document.getElementById('meterBar').style.height = `${scaledAverage}px`;
+            requestAnimationFrame(updateMeter);
+          };
+
+          updateMeter();
+        } catch (error) {
+          console.error('Error accessing microphone:', error);
+        }
+      };
+
+      initAudio();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'm') {
+        document.getElementById('meterBar').classList.toggle('highSens');
+        document.getElementById('meterBar').classList.toggle('lowSens');
+      }
+    });
+  </script>
+</body>
+</html>
