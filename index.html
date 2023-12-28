@@ -5,10 +5,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Screaming Meter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:ital,wght@1,600;1,700;1,800;1,900&family=Open+Sans:wght@700&display=swap"
+    rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.24/dist/full.min.css" rel="stylesheet" type="text/css" />
   <style>
     body {
-      font-family: Google Sans;
+      font-family: "Open Sans";
 
       height: 100vh;
       width: 100vw;
@@ -126,7 +131,7 @@
     };
 
     const triggerWin = async () => {
-      launchConfetti(); 
+      launchConfetti();
       document.getElementById('wrapper').dataset.win = "false";
       setTimeout(() => {
         document.getElementsByTagName('body')[0].style.background = "black";
