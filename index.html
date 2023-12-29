@@ -149,7 +149,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       let audioContext = null;
       let analyser = null;
-      const sensitivity = 10; // Adjust this sensitivity factor
+      const sensitivity = 3; // Adjust this sensitivity factor
 
       const initAudio = async () => {
         try {
@@ -196,6 +196,10 @@
         document.getElementById('meterBar').classList.remove('lowSens');
         document.getElementById('wrapper').dataset.win = "true";
       }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      document.getElementById("wrapper").innerHTML = "<video controls autoplay> <source src='playthis.mp4' type='video/mp4'> </video>";
     });
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
